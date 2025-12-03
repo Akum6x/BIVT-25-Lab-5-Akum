@@ -62,6 +62,7 @@ namespace Lab5
                     }
                 }
             }
+
             // end
 
         }
@@ -102,6 +103,7 @@ namespace Lab5
                 matrix[i, k] = matrix[i, maxDcol];
                 matrix[i, maxDcol] = temp;
             }
+
             // end
 
         }
@@ -112,49 +114,22 @@ namespace Lab5
             int rows = matrix.GetLength(0);
             int cols = matrix.GetLength(1);
 
-            if (rows == 1)
-            {
-                matrix = new int[0, cols];
-                return;
-            }
+            if (rows <= 0 || cols <= 0 || rows != cols) return;
 
-            int maxSum = -1;
-            int rowToDelete = 0;
+            int maxIndex = 0;
+            for (int i = 1; i < rows; i++)
+                if (matrix[i, i] > matrix[maxIndex, maxIndex])
+                    maxIndex = i;
 
             for (int i = 0; i < rows; i++)
             {
-                int currentSum = 0;
-                for (int j = 0; j < cols; j++)
+                if (i != maxIndex && i < cols && maxIndex < cols)
                 {
-                    if (matrix[i, j] > 0)
-                    {
-                        currentSum += matrix[i, j];
-                    }
-                }
-
-                if (currentSum > maxSum)
-                {
-                    maxSum = currentSum;
-                    rowToDelete = i;
+                    int temp = matrix[maxIndex, i];
+                    matrix[maxIndex, i] = matrix[i, maxIndex];
+                    matrix[i, maxIndex] = temp;
                 }
             }
-
-            int[,] newMatrix = new int[rows - 1, cols];
-            int newRow = 0;
-
-            for (int i = 0; i < rows; i++)
-            {
-                if (i != rowToDelete)
-                {
-                    for (int j = 0; j < cols; j++)
-                    {
-                        newMatrix[newRow, j] = matrix[i, j];
-                    }
-                    newRow++;
-                }
-            }
-
-            matrix = newMatrix;
             // end
 
         }
@@ -355,14 +330,15 @@ namespace Lab5
         {
 
             // code here
-            int n = matrix.GetLength(0);
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
 
-            for (int k = 0; k < n * n; k++)
+            for (int k = 0; k < rows * cols; k++)
             {
-                int i = k / n;
-                int j = k % n;
+                int i = k / cols;
+                int j = k % cols;
 
-                if (i == 0 || i == n - 1 || j == 0 || j == n - 1)
+                if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1)
                 {
                     matrix[i, j] = 0;
                 }
@@ -376,24 +352,67 @@ namespace Lab5
 
             // code here
             int n = matrix.GetLength(0);
-
             int sizeA = n * (n + 1) / 2;
             int sizeB = n * (n - 1) / 2;
 
             A = new int[sizeA];
             B = new int[sizeB];
 
-            int ia = 0, ib = 0;
+            int indexA = 0;
+            int indexB = 0;
 
             for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    if (j >= i)
-                        A[ia++] = matrix[i, j];
-                    else
-                        B[ib++] = matrix[i, j];
+            {
+                for (int j = i; j < n; j++)
+                {
+                    A[indexA] = matrix[i, j];
+                    indexA++;
+                }
+
+                for (int j = 0; j < i; j++)
+                {
+                    B[indexB] = matrix[i, j];
+                    indexB++;
+                }
+            }
             // end
 
             return (A, B);
+        }
+        public void Task11(int[,] matrix)
+        {
+
+            // code here
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+
+            for (int j = 0; j < cols; j++)
+            {
+                if (j % 2 == 0)
+                {
+                    for (int i = 0; i < rows - 1; i++)
+                        for (int k = i + 1; k < rows; k++)
+                            if (matrix[i, j] < matrix[k, j])
+                            {
+                                int temp = matrix[i, j];
+                                matrix[i, j] = matrix[k, j];
+                                matrix[k, j] = temp;
+                            }
+                }
+                else
+                {
+                    for (int i = 0; i < rows - 1; i++)
+                        for (int k = i + 1; k < rows; k++)
+                            if (matrix[i, j] > matrix[k, j])
+                            {
+                                int temp = matrix[i, j];
+                                matrix[i, j] = matrix[k, j];
+                                matrix[k, j] = temp;
+                            }
+                }
+            }
+            // end
+
         }
         public void Task12(int[][] array)
         {
@@ -429,6 +448,7 @@ namespace Lab5
                 }
             }
             // end
+
         }
     }
 }
