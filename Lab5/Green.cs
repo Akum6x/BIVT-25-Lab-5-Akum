@@ -333,14 +333,14 @@ namespace Lab5
             int rows = matrix.GetLength(0);
             int cols = matrix.GetLength(1);
 
-            for (int k = 0; k < rows * cols; k++)
+            for (int i = 0; i < rows; i++)
             {
-                int i = k / cols;
-                int j = k % cols;
-
-                if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1)
+                for (int j = 0; j < cols; j++)
                 {
-                    matrix[i, j] = 0;
+                    if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1)
+                    {
+                        matrix[i, j] = 0;
+                    }
                 }
             }
             // end
